@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/FirstFragment"
-        android:name="com.example.irrigationsystem.FirstFragment"
+        android:name="com.example.irrigationsystem.fragments.MainMenu"
         android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_first">
+        tools:layout="@layout/main_menu_fragment">
 
         <action
             android:id="@+id/action_FirstFragment_to_SecondFragment"
