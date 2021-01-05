@@ -26,7 +26,10 @@ class MainMenu : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         view.findViewById<Button>(R.id.BtnGraphs).setOnClickListener {
-            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+            findNavController().navigate(R.id.action_MainMenu_to_Graphs)
+        }
+        view.findViewById<Button>(R.id.BtnLiveView).setOnClickListener {
+            findNavController().navigate(R.id.action_MainMenu_to_liveView)
         }
     }
 }

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "987488952621",
+    "firebase_url": "https://irrigation-system-ab450.firebaseio.com",
+    "project_id": "irrigation-system-ab450",
+    "storage_bucket": "irrigation-system-ab450.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:987488952621:android:2b19b8a816eaee1d83b3a4",
+        "android_client_info": {
+          "package_name": "com.example.irrigationsystem"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "987488952621-g5vaudmdgde9deltcb9bnfhd7c7m39te.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqgs4lFoZKTDE26HkhUL9On1kNUGT1RKo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "987488952621-g5vaudmdgde9deltcb9bnfhd7c7m39te.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

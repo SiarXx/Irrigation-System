@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.LiveView">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:id="@+id/water_level_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/water_level_label"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/water_level_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/loading_value"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/water_level_label" />
+
+
+
+    <TextView
+        android:id="@+id/cur_hum_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/humidity_label"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/water_level_value" />
+
+    <TextView
+        android:id="@+id/cur_hum_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/loading_value"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cur_hum_label" />
+
+    <TextView
+        android:id="@+id/cur_temp_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/temperature_label"
+        android:textSize="24sp"
+        app:layout_constraintStart_toEndOf="@+id/cur_hum_label"
+        app:layout_constraintTop_toBottomOf="@+id/cur_soil_value" />
+
+    <TextView
+        android:id="@+id/cur_temp_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/loading_value"
+        android:textSize="24sp"
+        app:layout_constraintStart_toEndOf="@+id/cur_hum_value"
+        app:layout_constraintTop_toBottomOf="@+id/cur_temp_label" />
+
+    <TextView
+        android:id="@+id/cur_soil_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/soil_moisture_label"
+        android:textSize="24sp"
+        app:layout_constraintStart_toEndOf="@+id/water_level_label"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/cur_soil_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/loading_value"
+        android:textSize="24sp"
+        app:layout_constraintStart_toEndOf="@+id/water_level_value"
+        app:layout_constraintTop_toBottomOf="@+id/cur_soil_label" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

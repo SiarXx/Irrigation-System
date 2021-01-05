@@ -28,17 +28,17 @@
         android:backgroundTint="@color/secondaryColor"
         android:text="@string/controls"
         android:textColor="@color/secondaryTextColor"
-        app:layout_constraintBottom_toTopOf="@+id/BtnAbout"
+        app:layout_constraintBottom_toTopOf="@+id/BtnLiveView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/BtnGraphs" />
 
     <Button
-        android:id="@+id/BtnAbout"
+        android:id="@+id/BtnLiveView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/secondaryColor"
-        android:text="@string/about"
+        android:text="@string/live_view"
         android:textColor="@color/secondaryTextColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
