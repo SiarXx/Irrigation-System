@@ -15,6 +15,10 @@ import com.google.firebase.ktx.Firebase
 
 private lateinit var database: FirebaseDatabase
 private lateinit var waterLevelValueText: TextView
+private lateinit var curHumValueText: TextView
+private lateinit var curTempValueText: TextView
+private lateinit var curSoilValueText: TextView
+
 class LiveView : Fragment() {
 
 
@@ -28,15 +32,23 @@ class LiveView : Fragment() {
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_live_view, container, false)
+
         waterLevelValueText = view.findViewById(R.id.water_level_value)
-        val ref = database.reference.child("Water_Level")
+        curHumValueText = view.findViewById(R.id.cur_hum_value)
+        curTempValueText = view.findViewById(R.id.cur_temp_value)
+        curSoilValueText = view.findViewById(R.id.cur_soil_value)
+
+        val ref = database.reference
         ref.addValueEventListener(object : ValueEventListener{
             override fun onCancelled(error: DatabaseError) {
                 Toast.makeText(waterLevelValueText.context,error.message,Toast.LENGTH_LONG).show()
             }
 
             override fun onDataChange(snapshot: DataSnapshot) {
-                waterLevelValueText.text = snapshot.value.toString()
+                waterLevelValueText.text = snapshot.child("Water_Level").value.toString()
+                curHumValueText.text = snapshot.child("CurHumidity").value.toString()
+                curTempValueText.text = snapshot.child("CurTemperature").value.toString()
+                curSoilValueText.text = snapshot.child("CurSoil").value.toString()
             }
 
         })
