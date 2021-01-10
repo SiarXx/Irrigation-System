@@ -31,5 +31,9 @@ class MainMenu : Fragment() {
         view.findViewById<Button>(R.id.BtnLiveView).setOnClickListener {
             findNavController().navigate(R.id.action_MainMenu_to_liveView)
         }
+
+        view.findViewById<Button>(R.id.BtnControls).setOnClickListener{
+            findNavController().navigate(R.id.action_MainMenu_to_controls)
+        }
     }
 }

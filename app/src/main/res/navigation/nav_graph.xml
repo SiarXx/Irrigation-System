@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_MainMenu_to_liveView"
             app:destination="@id/liveView" />
+        <action
+            android:id="@+id/action_MainMenu_to_controls"
+            app:destination="@id/controls" />
     </fragment>
     <fragment
         android:id="@+id/Graphs"
@@ -27,4 +30,9 @@
         android:name="com.example.irrigationsystem.fragments.LiveView"
         android:label="fragment_live_view"
         tools:layout="@layout/fragment_live_view" />
+    <fragment
+        android:id="@+id/controls"
+        android:name="com.example.irrigationsystem.fragments.Controls"
+        android:label="fragment_controls"
+        tools:layout="@layout/fragment_controls" />
 </navigation>
