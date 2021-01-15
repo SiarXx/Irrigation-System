@@ -57,7 +57,3 @@ class LiveView : Fragment() {
 
 
 }
-
-private fun updateLiveValues(){
-
-}
