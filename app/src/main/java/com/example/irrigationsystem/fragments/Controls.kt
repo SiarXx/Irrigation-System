@@ -89,44 +89,15 @@ class Controls : Fragment(),View.OnClickListener {
     }
 
     private fun ManualWatering() {
-        var canWater = false
         val ref = database.reference
-        ref.addListenerForSingleValueEvent(object : ValueEventListener{
-            override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(context,error.message,Toast.LENGTH_SHORT).show()
-            }
-
-            override fun onDataChange(snapshot: DataSnapshot) {
-                canWater = snapshot.child("ManualWatering").getValue() as Boolean
-            }
-
-        })
-        if(canWater){
             ref.child("ManualWatering").setValue(true)
-        }
-        else
-            Toast.makeText(context,"There is watering request pending",Toast.LENGTH_SHORT).show()
     }
 
     private fun saveValues(min:Int,max:Int) {
-        var canChange = false
         val ref = database.reference
-        ref.addListenerForSingleValueEvent(object : ValueEventListener{
-            override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(context,error.message,Toast.LENGTH_SHORT).show()
-            }
-
-            override fun onDataChange(snapshot: DataSnapshot) {
-                canChange = snapshot.child("ChangeLevel").getValue() as Boolean
-            }
-
-        })
-        if(canChange){
             ref.child("ChangeLevel").setValue(true)
             ref.child("Watering").child("Min").setValue(min)
             ref.child("Watering").child("Max").setValue(max)
-        }
-        else
-            Toast.makeText(context,"There is change request pending",Toast.LENGTH_SHORT).show()
+
     }
 }
