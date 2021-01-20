@@ -1,3 +1,5 @@
+@file:Suppress("NAME_SHADOWING")
+
 package com.example.irrigationsystem.fragments
 
 import android.graphics.Color
@@ -87,9 +89,9 @@ class Graphs : Fragment(),View.OnClickListener {
                     val measurement = measurementSnapshot.getValue(HumidityModel::class.java)
                     measurementsHum.add(measurement!!)
                 }
-                val seriesHum = generateHumLineGraphSeries("Humidity",measurementsHum)
-                val seriesTemp = generateTempLineGraphSeries("Temperature",measurementsTemp)
-                val seriesSoil = generateSoilLineGraphSeries("Soil Moisture",measurementsSoil)
+                 seriesHum = generateHumLineGraphSeries("Humidity",measurementsHum)
+                 seriesTemp = generateTempLineGraphSeries("Temperature",measurementsTemp)
+                 seriesSoil = generateSoilLineGraphSeries("Soil Moisture",measurementsSoil)
                 generateCombinedSeriesGraph(seriesHum,seriesTemp,seriesSoil)
             }
         })
@@ -157,14 +159,20 @@ fun generateSingleSeriesGraph(label:String,affix:String,series:LineGraphSeries<D
     graph.secondScale.setMaxY(0.0)
     graph.addSeries(series)
     graph.gridLabelRenderer.verticalAxisTitle = label
-    graph.gridLabelRenderer.horizontalAxisTitle = "Date"
+    graph.gridLabelRenderer.horizontalAxisTitle = "Time"
     graph.legendRenderer.isVisible = true
     graph.legendRenderer.align = LegendRenderer.LegendAlign.TOP
     graph.legendRenderer.width = 350
+    graph.viewport.setMinX(series.lowestValueX)
+    graph.viewport.setMaxX(series.lowestValueX + 16080000.0)
+    graph.onDataChanged(false, false)
+    graph.viewport.isScrollable = true
     graph.gridLabelRenderer.labelFormatter = object : DefaultLabelFormatter() {
         override fun formatLabel(value: Double, isValueX: Boolean): String {
             return if (isValueX) {
-                super.formatLabel(value, isValueX)
+                val dateLong = value.toLong()
+                val date = Date(dateLong)
+                mapper.dateLabelPrintFormat(date)
             }else{
                 super.formatLabel(value, isValueX) + affix
             }
@@ -182,10 +190,15 @@ fun generateCombinedSeriesGraph(seriesHum:LineGraphSeries<DataPoint?>,seriesTemp
     graph.secondScale.setMaxY(100.0)
     graph.secondScale.setMinY(0.0)
     graph.gridLabelRenderer.verticalAxisTitle = "All Values"
-    graph.gridLabelRenderer.horizontalAxisTitle = "Date"
+    graph.gridLabelRenderer.horizontalAxisTitle = "Time"
     graph.legendRenderer.isVisible = true
     graph.legendRenderer.align = LegendRenderer.LegendAlign.TOP
     graph.legendRenderer.width = 350
+    graph.viewport.isXAxisBoundsManual = true
+    graph.viewport.setMinX(seriesHum.lowestValueX)
+    graph.viewport.setMaxX(seriesHum.lowestValueX + 16080000.0)
+    graph.onDataChanged(false, false)
+    graph.viewport.isScrollable = true
     graph.secondScale.labelFormatter = object : DefaultLabelFormatter(){
         override fun formatLabel(value: Double, isValueX: Boolean): String {
             return if (isValueX) {
@@ -198,7 +211,9 @@ fun generateCombinedSeriesGraph(seriesHum:LineGraphSeries<DataPoint?>,seriesTemp
     graph.gridLabelRenderer.labelFormatter = object : DefaultLabelFormatter() {
         override fun formatLabel(value: Double, isValueX: Boolean): String {
             return if (isValueX) {
-                super.formatLabel(value, isValueX)
+                val dateLong = value.toLong()
+                val date = Date(dateLong)
+                mapper.dateLabelPrintFormat(date)
             }else{
                 super.formatLabel(value, isValueX) + "%"
             }
@@ -207,46 +222,43 @@ fun generateCombinedSeriesGraph(seriesHum:LineGraphSeries<DataPoint?>,seriesTemp
 }
 fun generateHumLineGraphSeries(title:String,measurements:ArrayList<HumidityModel>):LineGraphSeries<DataPoint?>{
     val dataPoints = arrayOfNulls<DataPoint>(measurements.size)
-    val dates = arrayListOf<Date>()
-    var counter = 0.0
+    var counter = 0
     for(measure in measurements){
 
-        dataPoints[counter.toInt()] = DataPoint(counter,measure.value)
-        counter +=1.0
+        dataPoints[counter] = DataPoint(mapper.getDateFromLongs(measure.time,measure.date),measure.value)
+        counter +=1
     }
     val series = LineGraphSeries(dataPoints)
     series.title = title
-    series.setOnDataPointTapListener { _, dataPoint -> Toast.makeText(graph.context,dataPoint.toString(),Toast.LENGTH_SHORT).show() }
+    series.setOnDataPointTapListener { _, dataPoint -> Toast.makeText(graph.context,"[" + mapper.datePrintFormat(dataPoint.x) +"/"+ dataPoint.y + "]",Toast.LENGTH_SHORT).show() }
     series.isDrawDataPoints = true
     return series
 }
 fun generateTempLineGraphSeries(title:String,measurements:ArrayList<TempModel>):LineGraphSeries<DataPoint?>{
     val dataPoints = arrayOfNulls<DataPoint>(measurements.size)
-    val dates = arrayListOf<Date>()
-    var counter = 0.0
+    var counter = 0
     for(measure in measurements){
 
-        dataPoints[counter.toInt()] = DataPoint(counter,measure.value)
-        counter +=1.0
+        dataPoints[counter] = DataPoint(mapper.getDateFromLongs(measure.time,measure.date),measure.value)
+        counter +=1
     }
     val series = LineGraphSeries(dataPoints)
     series.title = title
-    series.setOnDataPointTapListener { _, dataPoint -> Toast.makeText(graph.context,dataPoint.toString(),Toast.LENGTH_SHORT).show() }
+    series.setOnDataPointTapListener { _, dataPoint -> Toast.makeText(graph.context,"[" + mapper.datePrintFormat(dataPoint.x) +"/"+ dataPoint.y + "]", Toast.LENGTH_SHORT).show() }
     series.isDrawDataPoints = true
     return series
 }
 fun generateSoilLineGraphSeries(title:String,measurements:ArrayList<SoilModel>):LineGraphSeries<DataPoint?>{
     val dataPoints = arrayOfNulls<DataPoint>(measurements.size)
-    val dates = arrayListOf<Date>()
-    var counter = 0.0
+    var counter = 0
     for(measure in measurements){
 
-        dataPoints[counter.toInt()] = DataPoint(counter,mapper.humValueToPercent(measure.value))
-        counter +=1.0
+        dataPoints[counter] = DataPoint(mapper.getDateFromLongs(measure.time,measure.date),mapper.humValueToPercent(measure.value))
+        counter +=1
     }
     val series = LineGraphSeries(dataPoints)
     series.title = title
-    series.setOnDataPointTapListener { _, dataPoint -> Toast.makeText(graph.context,dataPoint.toString(),Toast.LENGTH_SHORT).show() }
+    series.setOnDataPointTapListener { _, dataPoint -> Toast.makeText(graph.context,"[" + mapper.datePrintFormat(dataPoint.x) +"/"+ dataPoint.y + "]",Toast.LENGTH_SHORT).show() }
     series.isDrawDataPoints = true
     return series
 }
