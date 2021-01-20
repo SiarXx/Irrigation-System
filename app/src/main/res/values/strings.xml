@@ -13,7 +13,7 @@
     <string name="loading_value">Loading...</string>
     <string name="TODO">TODO: Implement </string>
     <string name="water_level_label">Water Level</string>
-    <string name="soil_moisture_label">Soil Moisture Level</string>
+    <string name="soil_moisture_label">Soil Moisture</string>
     <string name="temperature_label">Temperature</string>
     <string name="humidity_label">Humidity</string>
     <string name="save_values_btn">Save Values</string>
@@ -23,9 +23,8 @@
     <string name="main_controls_label">Water Pump Controls</string>
     <string name="min_water_label">Start Pump At</string>
     <string name="max_water_label">Stop Pump At</string>
+    <string name="combined_btn">All</string>
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

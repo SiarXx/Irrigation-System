@@ -1,33 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".fragments.Graphs">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/textview_second"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@id/button_second"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/button_second"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/previous"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textview_second" />
-    <com.jjoe64.graphview.GraphView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:id="@+id/mainGraph"
-        app:layout_constraintTop_toTopOf="parent"
-        />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_height="wrap_content"
+        android:minHeight="300dp"
+        tools:context=".fragments.Graphs">
+
+        <com.jjoe64.graphview.GraphView
+            android:id="@+id/mainGraph"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/btnHumGraph"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:text="@string/humidity_label"
+            app:layout_constraintTop_toBottomOf="@id/mainGraph"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btnTempGraph"
+            android:layout_marginTop="60dp"/>
+
+        <Button
+            android:id="@+id/btnTempGraph"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:text="@string/temperature_label"
+            app:layout_constraintTop_toBottomOf="@id/mainGraph"
+            app:layout_constraintStart_toEndOf="@id/btnHumGraph"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="60dp"/>
+
+        <Button
+            android:id="@+id/btnSoilGraph"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:text="@string/soil_moisture_label"
+            app:layout_constraintTop_toBottomOf="@id/btnHumGraph"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btnCombinedGraph"
+            android:layout_marginTop="30dp"/>
+
+        <Button
+            android:id="@+id/btnCombinedGraph"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:text="@string/combined_btn"
+            app:layout_constraintTop_toBottomOf="@id/btnTempGraph"
+            app:layout_constraintStart_toEndOf="@id/btnSoilGraph"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="30dp"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
