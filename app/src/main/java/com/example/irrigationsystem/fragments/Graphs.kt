@@ -1,5 +1,3 @@
-@file:Suppress("NAME_SHADOWING")
-
 package com.example.irrigationsystem.fragments
 
 import android.graphics.Color
