@@ -24,7 +24,6 @@ import com.jjoe64.graphview.GraphView
 import com.jjoe64.graphview.LegendRenderer
 import com.jjoe64.graphview.series.DataPoint
 import com.jjoe64.graphview.series.LineGraphSeries
-import com.jjoe64.graphview.series.Series
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -60,13 +59,46 @@ class Graphs : Fragment(),View.OnClickListener {
     }
 
     private fun startCreateCombinedGraph() {
-        TODO("Not yet implemented")
+        val humRef = databaseRef.reference
+        val measurementsSoil = arrayListOf<SoilModel>()
+        val measurementsTemp = arrayListOf<TempModel>()
+        val measurementsHum = arrayListOf<HumidityModel>()
+        var seriesHum :LineGraphSeries<DataPoint?>
+        var seriesTemp :LineGraphSeries<DataPoint?>
+        var seriesSoil :LineGraphSeries<DataPoint?>
+
+        humRef.addListenerForSingleValueEvent(object:ValueEventListener{
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(graph.context,"Error loading data",Toast.LENGTH_SHORT).show()
+            }
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val humChildren = snapshot.child("Humidity").children
+                val tempChildren = snapshot.child("Temperature").children
+                val soilChildren = snapshot.child("Soil_Moisture").children
+                for(measurementSnapshot in soilChildren){
+                    val measurement = measurementSnapshot.getValue(SoilModel::class.java)
+                    measurementsSoil.add(measurement!!)
+                }
+                for(measurementSnapshot in tempChildren){
+                    val measurement = measurementSnapshot.getValue(TempModel::class.java)
+                    measurementsTemp.add(measurement!!)
+                }
+                for(measurementSnapshot in humChildren){
+                    val measurement = measurementSnapshot.getValue(HumidityModel::class.java)
+                    measurementsHum.add(measurement!!)
+                }
+                val seriesHum = generateHumLineGraphSeries("Humidity",measurementsHum)
+                val seriesTemp = generateTempLineGraphSeries("Temperature",measurementsTemp)
+                val seriesSoil = generateSoilLineGraphSeries("Soil Moisture",measurementsSoil)
+                generateCombinedSeriesGraph(seriesHum,seriesTemp,seriesSoil)
+            }
+        })
     }
 
     private fun startCreateSoilGraph() {
-        val humRef = databaseRef.reference.child("Soil_Moisture")
+        val soilRef = databaseRef.reference.child("Soil_Moisture")
         val measurements = arrayListOf<SoilModel>()
-        humRef.addListenerForSingleValueEvent(object:ValueEventListener{
+        soilRef.addListenerForSingleValueEvent(object:ValueEventListener{
             override fun onCancelled(error: DatabaseError) {
                 Toast.makeText(graph.context,"Error loading data",Toast.LENGTH_SHORT).show()
             }
@@ -82,9 +114,9 @@ class Graphs : Fragment(),View.OnClickListener {
     }
 
     private fun startCreateTempGraph() {
-        val humRef = databaseRef.reference.child("Temperature")
+        val tempRef = databaseRef.reference.child("Temperature")
         val measurements = arrayListOf<TempModel>()
-        humRef.addListenerForSingleValueEvent(object:ValueEventListener{
+        tempRef.addListenerForSingleValueEvent(object:ValueEventListener{
             override fun onCancelled(error: DatabaseError) {
                 Toast.makeText(graph.context,"Error loading data",Toast.LENGTH_SHORT).show()
             }
@@ -120,6 +152,9 @@ fun startCreateHumGraph(){
 }
 fun generateSingleSeriesGraph(label:String,affix:String,series:LineGraphSeries<DataPoint?>){
     graph.removeAllSeries()
+    graph.secondScale.removeAllSeries()
+    graph.secondScale.setMinY(0.0)
+    graph.secondScale.setMaxY(0.0)
     graph.addSeries(series)
     graph.gridLabelRenderer.verticalAxisTitle = label
     graph.gridLabelRenderer.horizontalAxisTitle = "Date"
@@ -132,6 +167,40 @@ fun generateSingleSeriesGraph(label:String,affix:String,series:LineGraphSeries<D
                 super.formatLabel(value, isValueX)
             }else{
                 super.formatLabel(value, isValueX) + affix
+            }
+        }
+    }
+}
+fun generateCombinedSeriesGraph(seriesHum:LineGraphSeries<DataPoint?>,seriesTemp:LineGraphSeries<DataPoint?>,seriesSoil:LineGraphSeries<DataPoint?>){
+    graph.removeAllSeries()
+    seriesHum.color = Color.BLUE
+    seriesSoil.color - Color.GREEN
+    seriesTemp.color = Color.RED
+    graph.addSeries(seriesHum)
+    graph.addSeries(seriesSoil)
+    graph.secondScale.addSeries(seriesTemp)
+    graph.secondScale.setMaxY(100.0)
+    graph.secondScale.setMinY(0.0)
+    graph.gridLabelRenderer.verticalAxisTitle = "All Values"
+    graph.gridLabelRenderer.horizontalAxisTitle = "Date"
+    graph.legendRenderer.isVisible = true
+    graph.legendRenderer.align = LegendRenderer.LegendAlign.TOP
+    graph.legendRenderer.width = 350
+    graph.secondScale.labelFormatter = object : DefaultLabelFormatter(){
+        override fun formatLabel(value: Double, isValueX: Boolean): String {
+            return if (isValueX) {
+                super.formatLabel(value, isValueX)
+            }else{
+                super.formatLabel(value, isValueX) + "C"
+            }
+        }
+    }
+    graph.gridLabelRenderer.labelFormatter = object : DefaultLabelFormatter() {
+        override fun formatLabel(value: Double, isValueX: Boolean): String {
+            return if (isValueX) {
+                super.formatLabel(value, isValueX)
+            }else{
+                super.formatLabel(value, isValueX) + "%"
             }
         }
     }
@@ -180,30 +249,4 @@ fun generateSoilLineGraphSeries(title:String,measurements:ArrayList<SoilModel>):
     series.setOnDataPointTapListener { _, dataPoint -> Toast.makeText(graph.context,dataPoint.toString(),Toast.LENGTH_SHORT).show() }
     series.isDrawDataPoints = true
     return series
-}
-fun generateHumGraph(measurements: ArrayList<HumidityModel>) {
-    graph.removeAllSeries()
-    val dataPoints = arrayOfNulls<DataPoint>(measurements.size)
-    val dates = arrayListOf<Date>()
-    var counter = 0.0
-    for(measure in measurements){
-
-        dataPoints[counter.toInt()] = DataPoint(counter,measure.value)
-        counter +=1.0
-    }
-    val series = LineGraphSeries(dataPoints)
-    series.title = "Humidity"
-    series.setOnDataPointTapListener { _, dataPoint -> Toast.makeText(graph.context,dataPoint.toString(),Toast.LENGTH_SHORT).show() }
-    graph.addSeries(series)
-    graph.gridLabelRenderer.verticalAxisTitle = "Humidity"
-    graph.gridLabelRenderer.horizontalAxisTitle = "Date"
-    graph.gridLabelRenderer.labelFormatter = object : DefaultLabelFormatter() {
-        override fun formatLabel(value: Double, isValueX: Boolean): String {
-            return if (isValueX) {
-                super.formatLabel(value, isValueX)
-            }else{
-                super.formatLabel(value, isValueX) + "%"
-            }
-        }
-    }
 }
