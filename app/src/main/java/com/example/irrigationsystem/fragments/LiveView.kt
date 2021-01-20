@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import com.example.irrigationsystem.R
+import com.example.irrigationsystem.tools.Mapper
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
@@ -18,6 +19,7 @@ private lateinit var waterLevelValueText: TextView
 private lateinit var curHumValueText: TextView
 private lateinit var curTempValueText: TextView
 private lateinit var curSoilValueText: TextView
+private val mapper = Mapper()
 
 class LiveView : Fragment() {
 
@@ -45,10 +47,10 @@ class LiveView : Fragment() {
             }
 
             override fun onDataChange(snapshot: DataSnapshot) {
-                waterLevelValueText.text = snapshot.child("Water_Level").value.toString()
-                curHumValueText.text = snapshot.child("CurHumidity").value.toString()
-                curTempValueText.text = snapshot.child("CurTemperature").value.toString()
-                curSoilValueText.text = snapshot.child("CurSoil").value.toString()
+                waterLevelValueText.text = snapshot.child("Water_Level").value.toString() + "%"
+                curHumValueText.text = snapshot.child("CurHumidity").value.toString() + "%"
+                curTempValueText.text = snapshot.child("CurTemperature").value.toString() + "C"
+                curSoilValueText.text = mapper.humValueToPercent((snapshot.child("CurSoil").value as Long).toDouble()).toString() + "%"
             }
 
         })

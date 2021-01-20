@@ -4,10 +4,11 @@ import kotlin.math.round
 
 class Mapper () {
     fun humValueToPercent(value:Double):Double{
-        var percent = value/9
+        val percent = value/9
         return round(percent)
     }
-    fun humPercentToValue(value:Double):Double{
-        return value*9
+    fun humPercentToValue(percent:Double):Double{
+        val value = percent*9
+        return round(value)
     }
 }

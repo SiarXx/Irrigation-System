@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import com.example.irrigationsystem.R
+import com.example.irrigationsystem.tools.Mapper
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -20,6 +21,7 @@ import java.lang.NumberFormatException
 private lateinit var database: FirebaseDatabase
 private lateinit var minWaterEditText :EditText
 private lateinit var maxWaterEditText :EditText
+private val mapper = Mapper()
 class Controls : Fragment(),View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,14 +43,14 @@ class Controls : Fragment(),View.OnClickListener {
         startPumpBtn.setOnClickListener(this)
 
         val waterReference = database.getReference("Watering")
-        waterReference.addValueEventListener(object :ValueEventListener{
+        waterReference.addListenerForSingleValueEvent(object :ValueEventListener{
             override fun onCancelled(error: DatabaseError) {
                 Toast.makeText(view.context,error.message,Toast.LENGTH_SHORT).show()
             }
 
             override fun onDataChange(snapshot: DataSnapshot) {
-                minWaterEditText.setText(snapshot.child("Min").value.toString())
-                maxWaterEditText.setText(snapshot.child("Max").value.toString())
+                minWaterEditText.setText(mapper.humValueToPercent((snapshot.child("Min").value as Long).toDouble()).toString())
+                maxWaterEditText.setText(mapper.humValueToPercent((snapshot.child("Max").value as Long).toDouble()).toString())
             }
 
         })
@@ -63,21 +65,21 @@ class Controls : Fragment(),View.OnClickListener {
     }
 
     private fun validateValues() {
-        var minValue = 0
-        var maxValue = 0
+        var minValue = 0.0
+        var maxValue = 0.0
         try {
-             minValue = Integer.parseInt(minWaterEditText.text.toString())
-             maxValue = Integer.parseInt(maxWaterEditText.text.toString())
+             minValue = minWaterEditText.text.toString().toDouble()
+             maxValue = maxWaterEditText.text.toString().toDouble()
             if (maxValue <= minValue) {
                 Toast.makeText(context,"Stop value cannot be equal or lower than start value",Toast.LENGTH_SHORT).show()
                 return
             }
-            if(maxValue > 700 || maxValue <= 0){
-                Toast.makeText(context,"Stop value have to be between 1 and 700",Toast.LENGTH_SHORT).show()
+            if(maxValue > 63.0 || maxValue <= 1.0){
+                Toast.makeText(context,"Stop value have to be between 2.0 and 63.0",Toast.LENGTH_SHORT).show()
                 return
             }
-            if(minValue >= 700 || minValue < 0){
-                Toast.makeText(context,"Start value have to be between 0 and 699",Toast.LENGTH_SHORT).show()
+            if(minValue >= 63.0 || minValue < 0.0){
+                Toast.makeText(context,"Start value have to be between 1.0 and 62.0",Toast.LENGTH_SHORT).show()
                 return
             }
         }catch (e:NumberFormatException) {
@@ -93,11 +95,11 @@ class Controls : Fragment(),View.OnClickListener {
             ref.child("ManualWatering").setValue(true)
     }
 
-    private fun saveValues(min:Int,max:Int) {
+    private fun saveValues(min:Double,max:Double) {
         val ref = database.reference
             ref.child("ChangeLevel").setValue(true)
-            ref.child("Watering").child("Min").setValue(min)
-            ref.child("Watering").child("Max").setValue(max)
+            ref.child("Watering").child("Min").setValue(mapper.humPercentToValue(min))
+            ref.child("Watering").child("Max").setValue(mapper.humPercentToValue(max))
 
     }
 }
