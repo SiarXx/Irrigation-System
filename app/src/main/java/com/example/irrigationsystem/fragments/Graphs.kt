@@ -8,11 +8,14 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import com.example.irrigationsystem.R
 import com.example.irrigationsystem.models.HumidityModel
 import com.example.irrigationsystem.models.SoilModel
 import com.example.irrigationsystem.models.TempModel
 import com.example.irrigationsystem.tools.Mapper
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -45,6 +48,7 @@ class Graphs : Fragment(),View.OnClickListener {
         view.findViewById<Button>(R.id.btnTempGraph).setOnClickListener(this)
         view.findViewById<Button>(R.id.btnSoilGraph).setOnClickListener(this)
         view.findViewById<Button>(R.id.btnCombinedGraph).setOnClickListener(this)
+        view.findViewById<FloatingActionButton>(R.id.btnBackGraphs).setOnClickListener(this)
         return view
     }
 
@@ -55,6 +59,7 @@ class Graphs : Fragment(),View.OnClickListener {
             R.id.btnTempGraph -> startCreateTempGraph()
             R.id.btnSoilGraph -> startCreateSoilGraph()
             R.id.btnCombinedGraph -> startCreateCombinedGraph()
+            R.id.btnBackGraphs -> Navigation.findNavController(v).popBackStack()
         }
     }
 

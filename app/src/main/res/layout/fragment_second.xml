@@ -61,5 +61,16 @@
             app:layout_constraintStart_toEndOf="@id/btnSoilGraph"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="30dp"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnBackGraphs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnCombinedGraph"
+            android:layout_margin="16dp"
+            app:srcCompat="@drawable/abc_vector_test" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

@@ -8,8 +8,10 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.navigation.Navigation
 import com.example.irrigationsystem.R
 import com.example.irrigationsystem.tools.Mapper
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -39,6 +41,7 @@ class Controls : Fragment(),View.OnClickListener {
 
         val saveValuesBtn = view.findViewById<Button>(R.id.SaveValuesBtn)
         val startPumpBtn = view.findViewById<Button>(R.id.ManualWateringBtn)
+        view.findViewById<FloatingActionButton>(R.id.btnBackControls).setOnClickListener(this)
         saveValuesBtn.setOnClickListener(this)
         startPumpBtn.setOnClickListener(this)
 
@@ -61,6 +64,7 @@ class Controls : Fragment(),View.OnClickListener {
         when(v?.id){
             R.id.SaveValuesBtn -> validateValues()
             R.id.ManualWateringBtn -> ManualWatering()
+            R.id.btnBackControls -> Navigation.findNavController(v).popBackStack()
         }
     }
 

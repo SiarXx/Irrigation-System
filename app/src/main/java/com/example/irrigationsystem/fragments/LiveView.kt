@@ -8,8 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.navigation.Navigation
 import com.example.irrigationsystem.R
 import com.example.irrigationsystem.tools.Mapper
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
@@ -39,6 +41,9 @@ class LiveView : Fragment() {
         curHumValueText = view.findViewById(R.id.cur_hum_value)
         curTempValueText = view.findViewById(R.id.cur_temp_value)
         curSoilValueText = view.findViewById(R.id.cur_soil_value)
+        view.findViewById<FloatingActionButton>(R.id.btnBackLive).setOnClickListener{v ->
+            Navigation.findNavController(v).popBackStack()
+        }
 
         val ref = database.reference
         ref.addValueEventListener(object : ValueEventListener{
