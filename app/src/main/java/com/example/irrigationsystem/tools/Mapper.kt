@@ -8,11 +8,11 @@ import kotlin.math.round
 
 class Mapper () {
     fun humValueToPercent(value:Double):Double{
-        val percent = value/9
+        val percent = value/7
         return round(percent)
     }
     fun humPercentToValue(percent:Double):Double{
-        val value = percent*9
+        val value = percent*7
         return round(value)
     }
     fun getDateFromLongs(timeLong:Long,dateLong:Long):Date{

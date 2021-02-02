@@ -55,7 +55,8 @@ class LiveView : Fragment() {
                 waterLevelValueText.text = snapshot.child("Water_Level").value.toString() + "%"
                 curHumValueText.text = snapshot.child("CurHumidity").value.toString() + "%"
                 curTempValueText.text = snapshot.child("CurTemperature").value.toString() + "C"
-                curSoilValueText.text = mapper.humValueToPercent((snapshot.child("CurSoil").value as Long).toDouble()).toString() + "%"
+                curSoilValueText.text = mapper.humValueToPercent(
+                        (snapshot.child("CurSoil").value as Long).toDouble()).toString() + "%"
             }
 
         })

@@ -78,12 +78,12 @@ class Controls : Fragment(),View.OnClickListener {
                 Toast.makeText(context,"Stop value cannot be equal or lower than start value",Toast.LENGTH_SHORT).show()
                 return
             }
-            if(maxValue > 63.0 || maxValue <= 1.0){
-                Toast.makeText(context,"Stop value have to be between 2.0 and 63.0",Toast.LENGTH_SHORT).show()
+            if(maxValue > 100.0 || maxValue < 2.0){
+                Toast.makeText(context,"Stop value have to be between 2.0 and 100.0",Toast.LENGTH_SHORT).show()
                 return
             }
-            if(minValue >= 63.0 || minValue < 0.0){
-                Toast.makeText(context,"Start value have to be between 1.0 and 62.0",Toast.LENGTH_SHORT).show()
+            if(minValue >= 100.0 || minValue < 1.0){
+                Toast.makeText(context,"Start value have to be between 1.0 and 99.0",Toast.LENGTH_SHORT).show()
                 return
             }
         }catch (e:NumberFormatException) {
@@ -97,13 +97,20 @@ class Controls : Fragment(),View.OnClickListener {
     private fun ManualWatering() {
         val ref = database.reference
             ref.child("ManualWatering").setValue(true)
+                    .addOnSuccessListener{
+                        Toast.makeText(context,"Pump request send",Toast.LENGTH_SHORT).show()
+                    }
+
     }
 
     private fun saveValues(min:Double,max:Double) {
         val ref = database.reference
-            ref.child("ChangeLevel").setValue(true)
             ref.child("Watering").child("Min").setValue(mapper.humPercentToValue(min))
             ref.child("Watering").child("Max").setValue(mapper.humPercentToValue(max))
+            ref.child("ChangeLevel").setValue(true)
+                    .addOnSuccessListener {
+                        Toast.makeText(context,"Values saved successfully",Toast.LENGTH_SHORT).show()
+                    }
 
     }
 }
