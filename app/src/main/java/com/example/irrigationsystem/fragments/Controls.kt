@@ -24,6 +24,9 @@ private lateinit var database: FirebaseDatabase
 private lateinit var minWaterEditText :EditText
 private lateinit var maxWaterEditText :EditText
 private val mapper = Mapper()
+private var minValue: Double = 0.0
+private var maxValue: Double = 0.0
+
 class Controls : Fragment(),View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,36 +65,35 @@ class Controls : Fragment(),View.OnClickListener {
 
     override fun onClick(v: View?) {
         when(v?.id){
-            R.id.SaveValuesBtn -> validateValues()
+            R.id.SaveValuesBtn -> if(validateValues()){
+                saveValues(minValue, maxValue)
+            }
             R.id.ManualWateringBtn -> ManualWatering()
             R.id.btnBackControls -> Navigation.findNavController(v).popBackStack()
         }
     }
 
-    private fun validateValues() {
-        var minValue = 0.0
-        var maxValue = 0.0
+    private fun validateValues():Boolean {
         try {
              minValue = minWaterEditText.text.toString().toDouble()
              maxValue = maxWaterEditText.text.toString().toDouble()
             if (maxValue <= minValue) {
                 Toast.makeText(context,"Stop value cannot be equal or lower than start value",Toast.LENGTH_SHORT).show()
-                return
+                return false
             }
             if(maxValue > 100.0 || maxValue < 2.0){
                 Toast.makeText(context,"Stop value have to be between 2.0 and 100.0",Toast.LENGTH_SHORT).show()
-                return
+                return false
             }
             if(minValue >= 100.0 || minValue < 1.0){
                 Toast.makeText(context,"Start value have to be between 1.0 and 99.0",Toast.LENGTH_SHORT).show()
-                return
+                return false
             }
         }catch (e:NumberFormatException) {
             Toast.makeText(context,"Given values have to be numbers",Toast.LENGTH_SHORT).show()
+            return false
         }
-        saveValues(minValue,maxValue)
-
-
+        return true;
     }
 
     private fun ManualWatering() {
